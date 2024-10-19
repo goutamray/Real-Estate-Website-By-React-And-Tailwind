@@ -32,7 +32,7 @@ const SignUp = () => {
 
     try {
       // Create user
-      createNewUser("/", input)
+      createNewUser("/register", input)
         .then((res) => {
           setLoading(false); 
           createToast("User Register Successful", "success");
