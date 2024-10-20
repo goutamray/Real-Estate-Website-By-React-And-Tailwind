@@ -16,3 +16,20 @@ import axios from "axios";
   }
 };
 
+
+ /**
+ * google login user data to api 
+ * @param {*} url 
+ * @param {*} formData 
+ * @returns 
+ */
+
+ export const loginGoogleUserData = async (url, formData) => {
+    try {
+      const response = await axios.post(`http://localhost:5050/api/v1/user${url}`, formData);
+      return response.data; // Return the data from the response
+    } catch (error) {
+      console.error('Error submitting Google login data:', error.message);
+      throw error; // Re-throw the error for handling in OAuth.jsx
+    }
+  };

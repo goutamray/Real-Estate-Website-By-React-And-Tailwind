@@ -2,15 +2,20 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { createNewUser } from "../../api/api";
 import createToast from "../utilis/toastify";
+import { useDispatch, useSelector } from "react-redux";
+
+import { signInStart, signInSuccess, signInFailure } from "../redux/userSlice"; 
+import OAuth from "../components/OAuth";
 
 const SignIn = () => {
   const [input, setInput] = useState({
     email: "",
     password: "",
   });
-  const [loading, setLoading] = useState(false);
+  const { loading } = useSelector((state) => state.user); 
 
   const navigate = useNavigate();
+  const disPatch = useDispatch();
 
   // handle change input
   const handleInputChange = (e) => {
@@ -23,11 +28,13 @@ const SignIn = () => {
   // handle form submit
   const handleLoginFormSubmit = (e) => {
     e.preventDefault();
-    setLoading(true);
+    disPatch(signInStart())
+    // setLoading(true);
   
     // Validate all inputs 
     if (!input.email || !input.password) {
-      setLoading(false);
+      disPatch(signInFailure())
+      // setLoading(false);
       createToast("All fields are required", "error");
       return;
     }
@@ -36,6 +43,7 @@ const SignIn = () => {
     createNewUser("/login", input)
       .then((res) => {
         createToast("User Login Successful", "success");
+        disPatch(signInSuccess(input)); 
         navigate("/");
       })
       .catch((err) => {
@@ -50,11 +58,9 @@ const SignIn = () => {
         }
       })
       .finally(() => {
-        setLoading(false);
         setInput({
           email: "",
           password: "",
-          isAdmin: false,
         });
       });
   };
@@ -95,6 +101,7 @@ const SignIn = () => {
                 "Sign In"
               )}
             </button>
+            <OAuth />
           </form>
           <div className="flex gap-2 mt-5 justify-center text-md font-medium">
             <p> Dont have an Account</p>

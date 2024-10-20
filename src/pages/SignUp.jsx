@@ -2,6 +2,7 @@ import { useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
 import { createNewUser } from "../../api/api"
 import createToast from "../utilis/toastify"
+import OAuth from "../components/OAuth"
 
 
 const SignUp = () => {
@@ -111,13 +112,14 @@ const SignUp = () => {
                  onChange={handleInputChange}
                 />
               <button type="submit" className="p-3 bg-slate-700 text-center text-white font-medium rounded-lg uppercase hover:opacity-90">    
-                                {
-                                  loading === true ?   
-                                  <p className="uppercase"> Loading...</p> : 
-                                  "Sign Up"
-                                }
+                      {
+                          loading === true ?   
+                          <p className="uppercase"> Loading...</p> : 
+                          "Sign Up"
+                        }
 
               </button>
+              <OAuth />
            </form>
            <div className="flex gap-2 mt-5 justify-center text-md font-medium">
               <p> Have an Account</p>
