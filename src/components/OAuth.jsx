@@ -2,9 +2,10 @@ import { getAuth, GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { fireBaseApp } from "../firebase";
 import { loginGoogleUserData } from "../../api/api.js";
 import createToast from "../utilis/toastify";
+
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { signInSuccess } from "../redux/userSlice";
+import { signInSuccess, signInFailure } from "../redux/userSlice";
 
 
 const provider = new GoogleAuthProvider();
@@ -33,21 +34,11 @@ const OAuth = () => {
       loginGoogleUserData("/authwithgoogle", fields).then((res) => {
         try {
            if (res.error !== true) {
-            //  localStorage.setItem("token", res.token);
-            //  const user = {
-            //   name : res?.user?.name,
-            //   email : res?.user?.email,
-            //   userId : res?.user?.id
-            //  };
-            // localStorage.setItem("user" , JSON.stringify(user));
-
             disPatch(signInSuccess(fields)); 
             
             createToast("User Login Successfull", "success");
             setTimeout(() => {
               navigate("/");
-              // context.isLogin(true);
-              // setLoading(false);
             }, 2000);
 
            }else{
@@ -55,7 +46,7 @@ const OAuth = () => {
            }
         } catch (error) {
            console.log(error.message);
-          //  setLoading(false);
+          disPatch(signInFailure())
         }
 
       })
