@@ -1,76 +1,70 @@
+
+
 import { useEffect, useState } from "react";
-
-
- import avaterPhoto from "../assets/aaaa.jpg"; 
+import avaterPhoto from "../assets/aaaa.jpg"
 import { useNavigate } from "react-router-dom";
 import { fetchUserDataFromApi, updateUserData } from "../../api/api";
 import createToast from "../utilis/toastify";
 
 const Profile = () => {
+  const [isLogin, setIsLogin] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [userData, setUserData] = useState([]);
+
   const [input, setInput] = useState({
     name: "",
     email: "",
     photo: "", 
     previewPhoto: "",
   });
-
-
   const navigate = useNavigate();
-  const [isLogin, setIsLogin] = useState(false);
-  const [loading, setIsLoading] = useState(false);
-  const [userData, setUserData] = useState([]);
-  
 
-
-
-    // Handle input change 
-    const handleInputChange = (e) => {
+  // Handle input change 
+  const handleInputChange = (e) => {
       setInput((prevState) => ({
-        ...prevState,
-        [e.target.name]: e.target.value,
-        // Keep the existing photo in the input state
+          ...prevState,
+          [e.target.name]: e.target.value
       }));
     };
 
- // handle file upload
-  const handleFileUpload = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const imageUrl = URL.createObjectURL(file);
-      setInput((prevState) => ({
-        ...prevState,
-        photo: imageUrl, // Store the file object for uploading
-        previewPhoto: imageUrl, // For image preview
-      }));
-    }
-  };
-  
+    // Handle file input change and set preview
+    const handleFileChange = (e) => {
+      const file = e.target.files[0];
+      if (file) {
+        const imageUrl = URL.createObjectURL(file);
+        setInput((prevState) => ({
+          ...prevState,
+          photo: file, // Store the file object for uploading
+          previewPhoto: imageUrl, // For image preview
+        }));
+      }
+    };
 
-  // user login check 
+
     useEffect(() => {
       window.scrollTo(0,0);
       const token = localStorage.getItem("token");
       if (token !== null && token !== undefined && token !== "") {
         setIsLogin(true);
       }else{
-        navigate("/signIn"); 
+        navigate("/sign-in"); 
       }
-    }, [navigate]);
-
-
-
+    }, []);
+  
+  
     useEffect(() => {
       const user = JSON.parse(localStorage.getItem("user"));
   
       if (user && user?.userId) {
         fetchUserDataFromApi(`/${user?.userId}`).then((res) => {
           if (res) {
-            setUserData(res);
-         
+            setUserData(res); 
+  
             // Ensure response has required fields before setting input state
             setInput({
               name: res.user?.name || "",
               email: res.user?.email || "",
+            
               photo: res.user?.photo || "", // Ensure you are using the URL returned from API
               previewPhoto: res.user?.photo || avaterPhoto, // Default to avatar photo if no photo is available
             });
@@ -80,74 +74,86 @@ const Profile = () => {
         console.error("User not found in localStorage");
       }
     }, []);
+    
+// handle user update 
+const handleUserUpdate = (e) => {
+  e.preventDefault();
+  setIsLoading(true);
+
+  // Validation
+  if (!input.name || !input.email ) {
+    setIsLoading(false);
+    createToast("All fields are required");
+    return;
+  }
+
+  const formData = new FormData();
+  formData.append('name', input.name);
+  formData.append('email', input.email);
+  if (input.photo) {
+    formData.append('photo', input.photo);
+  }
+
+  // Get token and user data
+  const token = localStorage.getItem("token");
+  const user = JSON.parse(localStorage.getItem("user"));
 
 
-    //handle user update 
-    const handleUserUpdate = (e) => {
-      e.preventDefault();
-      setIsLoading(true);
-    
-      // Validation
-      if (!input.name || !input.email ) {
+  if (user?.userId && token) {
+    updateUserData(`/${user?.userId}`, formData)
+      .then((res) => {
         setIsLoading(false);
-        createToast("All fields are required");
-        return;
-      }
-    
-      const formData = new FormData();
-      formData.append('name', input.name);
-      formData.append('email', input.email);
-      if (input.photo) {
-        formData.append('photo', input.photo);
-      }
-    
-      // Get token and user data
-      const token = localStorage.getItem("token");
-      const user = JSON.parse(localStorage.getItem("user"));
-    
-      if (user?.userId && token) {
-        updateUserData(`/${user?.userId}`, formData)
-          .then((res) => {
-            setIsLoading(false);
-            createToast("User updated successfully!", "success");
-    
-    
-              // Update the user information in localStorage
-              const updatedUser = {
-                    ...user,
-                    name: res.user?.name,
-                    email: res.user?.email,
-                    photo: res.user?.photo || input.previewPhoto, 
-                  };
-              
-                // Store the updated user data in localStorage
-                localStorage.setItem("user", JSON.stringify(updatedUser));
-          })
-      } else {
-        setIsLoading(false);
-        createToast("User or token not found", "error");
-      }
-    };
-    
-    
+        createToast("User updated successfully!", "success");
+
+        // console.log(res);
+        
+
+          // Update the user information in localStorage
+            const updatedUser = {
+              ...user,
+              name: res.user?.name,
+              email: res.user?.email,
+              photo: res.user?.photo || input.previewPhoto, // Use the updated photo URL or the preview photo
+            };
+        
+          // Store the updated user data in localStorage
+          localStorage.setItem("user", JSON.stringify(updatedUser));
+      })
+  } else {
+    setIsLoading(false);
+    createToast("User or token not found", "error");
+  }
+};
+
+
+  //user logout 
+  const handleLogout = () => {
+    localStorage.clear();
+
+    setTimeout(() => {
+        navigate("/sign-in");
+        createToast("User Logout Successful", "success");
+    }, 2000);
+}; 
     
   return (
     <div className="my-8">
       <div className="container">
         <h2 className="text-3xl text-center font-semibold mb-5 "> Profile </h2>
         <div className="form-data w-[500px] mx-auto">
-          <form  onSubmit={handleUserUpdate} className="text-center">
+          <form onSubmit={handleUserUpdate} className="text-center">
         
             <img 
-               src={input.photo || avaterPhoto } 
+               src={input.previewPhoto || avaterPhoto}
                alt="photo" 
-              className="h-24 w-24 object-cover rounded-full text-center mx-auto cursor-pointer mb-4"
+               onChange={handleFileChange}
+               className="h-24 w-24 object-cover border border-1 border-gray-400 rounded-full text-center mx-auto cursor-pointer mb-4"
             />
             <div className="flex flex-col justify-center items-center">
               <label className="bg-green-600 px-3 py-2 rounded-lg w-[120px] mx-auto text-white cursor-pointer" > Upload </label>
               <input    
                type="file"
-               onChange={handleFileUpload} 
+               onChange={handleFileChange} 
                className="relative -top-9 w-[120px] h-8 opacity-0 cursor-pointer "
               />
             </div>
@@ -174,15 +180,12 @@ const Profile = () => {
                 type="submit"
                 className="p-3 bg-slate-700 text-center text-white font-medium rounded-lg uppercase hover:opacity-90 w-full"
               >
-                {
-                  loading ? <p className="uppercase"> Updating...</p> : "Update "
-                }
+                update
               
               </button>
           </form>
-          <div className="flex justify-between mt-5">
-            <span className="text-red-700 font-medium cursor-pointer"> Delete account </span>
-            <span className="text-red-700 font-medium cursor-pointer"> Sign out </span>
+          <div className=" mt-5">
+            <button  onClick={handleLogout}  className="text-white rounded-lg bg-green-700 px-3 py-2 text-xl font-medium cursor-pointer"> Sign out </button>
           </div>
         </div>
       

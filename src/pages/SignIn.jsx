@@ -28,8 +28,9 @@ const SignIn = () => {
     }));
   };
 
-  // Handle form submit 
-  const handleLoginFormSubmit = (e) => {
+
+   // Handle form submit 
+   const handleLoginFormSubmit = (e) => {
     e.preventDefault();
     setLoading(true);
   
@@ -76,59 +77,55 @@ const SignIn = () => {
       });
   };
 
-    // handle google login 
-    const signInWithGoogle = async () => {
-      signInWithPopup(auth, provider)
-      .then((result) => {
-        const credential = GoogleAuthProvider.credentialFromResult(result);
-        const token = credential.accessToken;
-        const user = result.user;
-        
-        const fields = {
-          name : user.providerData[0].displayName,
-          email: user.providerData[0].email,
-          password : null,
-          photo : user.providerData[0].photoURL,
-          isAdmin : false,
-        }
-       
-        loginGoogleUserData("/authwithgoogle", fields).then((res) => {
-          // console.log(res);
-          
-          try {
-             if (res.error !== true) {
-               localStorage.setItem("token", res.token);
-               const user = {
-                name : res?.user?.name,
-                email : res?.user?.email,
-                userId : res?.user?._id,
-                photo : res?.user?.photo
-               };
-               
-              localStorage.setItem("user" , JSON.stringify(user));
-              createToast("User Login Successfull", "success");
-              setTimeout(() => {
-                navigate("/");
-                context.isLogin(true);
-                setLoading(false);
-              }, 2000);
-  
-             }else{
+
+  // handle google login 
+  const signInWithGoogle = async () => {
+    signInWithPopup(auth, provider)
+    .then((result) => {
+      const credential = GoogleAuthProvider.credentialFromResult(result);
+      const token = credential.accessToken;
+      const user = result.user;
+      
+      const fields = {
+        name : user.providerData[0].displayName,
+        email: user.providerData[0].email,
+        password : null,
+        photo : user.providerData[0].photoURL,
+        isAdmin : false,
+      }
+     
+      loginGoogleUserData("/authwithgoogle", fields).then((res) => {
+        try {
+           if (res.error !== true) {
+             localStorage.setItem("token", res.token);
+             const user = {
+              name : res?.user?.name,
+              email : res?.user?.email,
+              userId : res?.user?._id
+             };
+            localStorage.setItem("user" , JSON.stringify(user));
+            createToast("User Login Successfull", "success");
+            setTimeout(() => {
+              navigate("/");
+              context.isLogin(true);
               setLoading(false);
-             }
-          } catch (error) {
-             console.log(error.message);
-             setLoading(false);
-          }
-  
-        })
-        
-  
-      }).catch((error) => {
-        const email = error.customData.email;
-        const credential = GoogleAuthProvider.credentialFromError(error);
-      });
-    }
+            }, 2000);
+
+           }else{
+            setLoading(false);
+           }
+        } catch (error) {
+           console.log(error.message);
+           setLoading(false);
+        }
+
+      })
+      
+    }).catch((error) => {
+      const email = error.customData.email;
+      const credential = GoogleAuthProvider.credentialFromError(error);
+    });
+  }
 
 
   return (

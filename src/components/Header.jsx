@@ -10,21 +10,42 @@ import { useContext, useEffect, useState } from "react";
 const Header = () => {
 
   const context = useContext(MyContext); 
-  const [photo, setPhoto] = useState("")
+  const [photoData, setPhoto] = useState(null)
 
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user"));
-    console.log(user?.photo);
-    
     setPhoto(user?.photo)
   }, []);
+
+    // Check login status on component mount
+    useEffect(() => {
+      const token = localStorage.getItem("token");
+       
+        if (token) {
+            context?.setIsLogin(true); 
+            const userData = JSON.parse(localStorage.getItem("user"));
+            context.setUser(userData); 
+        } else {
+            context?.setIsLogin(false); 
+            context.setUser({
+              name: "",
+              email: "",
+              userId: ""
+            });
+        }
+    }, [context]);
+
+
+
 
   
   return (
     <div className="py-2 shadow-md bg-slate-200 ">
       <div className="container flex justify-between items-center ">
         <div>
+          <Link to="/">
             <img src={logo} alt="logo" className="w-20 sm:w-full"/>
+          </Link>
         </div>
         <div>
           <form className="bg-slate-100 p-2 sm:p-3 rounded-lg flex justify-between items-center">
@@ -38,8 +59,8 @@ const Header = () => {
           <li className="hidden sm:inline text-slate-700"> <Link to="/about"> About </Link></li>
           <li className=" text-slate-700 "> 
 
-          {
-            context?.isLogin !== true ? (
+       {
+            context?.isLogin !== true ? ( 
               <Link
                 to="/sign-in"
                 className="bg-[#1db2ff] px-2 sm:px-4 py-2 rounded-md text-white font-medium"
@@ -50,14 +71,14 @@ const Header = () => {
               <div>
                 <Link to="/profile">
                   <img
-                    src={ photo ? photo :  avater }
-                    alt="profile"
+                  src={ photoData ? photoData :  avater }
+                   alt="profile"
                     className="h-7 w-7 rounded-full object-cover"
-                  />
-                </Link>
-              </div>
+                 />
+              </Link>
+             </div>
             )
-          }
+        }
 
            
            
