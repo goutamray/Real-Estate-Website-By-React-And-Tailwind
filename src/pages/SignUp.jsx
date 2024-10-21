@@ -2,7 +2,6 @@ import { useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
 import { createNewUser } from "../../api/api"
 import createToast from "../utilis/toastify"
-import OAuth from "../components/OAuth"
 
 
 const SignUp = () => {
@@ -119,7 +118,7 @@ const SignUp = () => {
                         }
 
               </button>
-              <OAuth />
+           
            </form>
            <div className="flex gap-2 mt-5 justify-center text-md font-medium">
               <p> Have an Account</p>

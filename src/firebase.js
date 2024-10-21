@@ -1,19 +1,19 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 
-
 // Your web app's Firebase configuration
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
-  authDomain: "real-estate-app-15a62.firebaseapp.com",
-  projectId: "real-estate-app-15a62",
-  storageBucket: "real-estate-app-15a62.appspot.com",
-  messagingSenderId: "375906910782",
-  appId: "1:375906910782:web:37f7fb0e514e17972cc76f"
+  authDomain: "real-estate-app-update.firebaseapp.com",
+  projectId: "real-estate-app-update",
+  storageBucket: "real-estate-app-update.appspot.com",
+  messagingSenderId: "667490807577",
+  appId: "1:667490807577:web:48eab5132303d467835f88"
 };
 
 // Initialize Firebase
 export const fireBaseApp = initializeApp(firebaseConfig);
+
 
 
 

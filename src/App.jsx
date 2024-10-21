@@ -11,10 +11,48 @@ import SignUp from './pages/SignUp';
 import Profile from './pages/Profile';
 import About from './pages/About';
 import { ToastContainer } from 'react-toastify';
-import PrivateRoute from './components/PrivateRoute';
+import { createContext, useEffect, useState } from 'react';
 
+// context 
+const MyContext = createContext();
 
 function App() {
+
+  const [isLogin, setIsLogin] = useState(false);  
+  const [user, setUser] = useState(() => {
+    return JSON.parse(localStorage.getItem("user")) || {
+      name: "",
+      email: "",
+      userId: ""
+    };
+  });
+
+
+      // login & logout 
+      useEffect(() => {
+        const token = localStorage.getItem("token");
+    
+        if (token) {
+          setIsLogin(true); 
+          const userData = JSON.parse(localStorage.getItem("user"));
+          setUser(userData); 
+        } else {
+          setIsLogin(false); 
+          setUser({
+            name: "",
+            email: "",
+            userId: ""
+          });
+        }
+      }, []);
+
+  // send all data
+  const values = {
+    isLogin,
+    setIsLogin,
+    user,
+    setUser
+  }
 
   return (
     <>
@@ -32,20 +70,26 @@ function App() {
         theme="light"
       />
 
+
+
        <BrowserRouter>
+       <MyContext.Provider value={values}>
          <Header />
           <Routes>
             <Route path='/' element={ <Home /> }/>
             <Route path='/about' element={ <About /> }/>
             <Route path='/sign-in' element={ <SignIn /> }/>
             <Route path='/sign-up' element={ <SignUp /> }/>
-            <Route element={ <PrivateRoute /> }>
-                <Route path='/profile' element={ <Profile /> }/>
-            </Route >
+            <Route path='/profile' element={ <Profile /> }/>
+          
           </Routes>
+          </MyContext.Provider>
        </BrowserRouter>
     </>
   )
 }
 
-export default App; 
+export default App
+
+
+export { MyContext }; 
