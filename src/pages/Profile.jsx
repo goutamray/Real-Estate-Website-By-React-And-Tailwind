@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import avaterPhoto from "../assets/aaaa.jpg"
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { fetchUserDataFromApi, updateUserData } from "../../api/api";
 import createToast from "../utilis/toastify";
 
@@ -52,6 +52,7 @@ const Profile = () => {
     }, []);
   
   
+    // get single data in logged in user 
     useEffect(() => {
       const user = JSON.parse(localStorage.getItem("user"));
   
@@ -75,55 +76,56 @@ const Profile = () => {
       }
     }, []);
     
-// handle user update 
-const handleUserUpdate = (e) => {
-  e.preventDefault();
-  setIsLoading(true);
 
-  // Validation
-  if (!input.name || !input.email ) {
-    setIsLoading(false);
-    createToast("All fields are required");
-    return;
-  }
+  // handle user update 
+  const handleUserUpdate = (e) => {
+    e.preventDefault();
+    setIsLoading(true);
 
-  const formData = new FormData();
-  formData.append('name', input.name);
-  formData.append('email', input.email);
-  if (input.photo) {
-    formData.append('photo', input.photo);
-  }
+    // Validation
+    if (!input.name || !input.email ) {
+      setIsLoading(false);
+      createToast("All fields are required");
+      return;
+    }
 
-  // Get token and user data
-  const token = localStorage.getItem("token");
-  const user = JSON.parse(localStorage.getItem("user"));
+    const formData = new FormData();
+    formData.append('name', input.name);
+    formData.append('email', input.email);
+    if (input.photo) {
+      formData.append('photo', input.photo);
+    }
+
+    // Get token and user data
+    const token = localStorage.getItem("token");
+    const user = JSON.parse(localStorage.getItem("user"));
 
 
-  if (user?.userId && token) {
-    updateUserData(`/${user?.userId}`, formData)
-      .then((res) => {
-        setIsLoading(false);
-        createToast("User updated successfully!", "success");
+    if (user?.userId && token) {
+      updateUserData(`/${user?.userId}`, formData)
+        .then((res) => {
+          setIsLoading(false);
+          createToast("User updated successfully!", "success");
 
-        // console.log(res);
-        
+          // console.log(res);
+          
 
-          // Update the user information in localStorage
-            const updatedUser = {
-              ...user,
-              name: res.user?.name,
-              email: res.user?.email,
-              photo: res.user?.photo || input.previewPhoto, // Use the updated photo URL or the preview photo
-            };
-        
-          // Store the updated user data in localStorage
-          localStorage.setItem("user", JSON.stringify(updatedUser));
-      })
-  } else {
-    setIsLoading(false);
-    createToast("User or token not found", "error");
-  }
-};
+            // Update the user information in localStorage
+              const updatedUser = {
+                ...user,
+                name: res.user?.name,
+                email: res.user?.email,
+                photo: res.user?.photo || input.previewPhoto, // Use the updated photo URL or the preview photo
+              };
+          
+            // Store the updated user data in localStorage
+            localStorage.setItem("user", JSON.stringify(updatedUser));
+        })
+    } else {
+      setIsLoading(false);
+      createToast("User or token not found", "error");
+    }
+  };
 
 
   //user logout 
@@ -134,7 +136,7 @@ const handleUserUpdate = (e) => {
         navigate("/sign-in");
         createToast("User Logout Successful", "success");
     }, 2000);
-}; 
+ }; 
     
   return (
     <div className="my-8">
@@ -176,17 +178,21 @@ const handleUserUpdate = (e) => {
                 onChange={handleInputChange}
               />
             <button
-                
                 type="submit"
                 className="p-3 bg-slate-700 text-center text-white font-medium rounded-lg uppercase hover:opacity-90 w-full"
               >
                 update
-              
               </button>
           </form>
-          <div className=" mt-5">
-            <button  onClick={handleLogout}  className="text-white rounded-lg bg-green-700 px-3 py-2 text-xl font-medium cursor-pointer"> Sign out </button>
+          <div className="mt-4">
+            <button className="w-full uppercase text-md bg-green-700 p-3 text-white rounded-lg font-medium"> 
+                <Link to="/create-listing"> Create Listing </Link>
+            </button>
           </div>
+          <div className=" mt-5">
+            <button  onClick={handleLogout}  className="text-white rounded-lg bg-red-700 px-3 py-2 text-xl font-medium cursor-pointer"> Sign out </button>
+          </div>
+
         </div>
       
       </div>

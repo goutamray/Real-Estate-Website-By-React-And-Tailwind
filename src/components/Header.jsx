@@ -10,7 +10,7 @@ import { useContext, useEffect, useState } from "react";
 const Header = () => {
 
   const context = useContext(MyContext); 
-  const [photoData, setPhoto] = useState(null)
+  const [photoData, setPhoto] = useState("")
 
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user"));
@@ -33,11 +33,7 @@ const Header = () => {
               userId: ""
             });
         }
-    }, [context]);
-
-
-
-
+    }, []);
   
   return (
     <div className="py-2 shadow-md bg-slate-200 ">

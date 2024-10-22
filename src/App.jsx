@@ -12,6 +12,7 @@ import Profile from './pages/Profile';
 import About from './pages/About';
 import { ToastContainer } from 'react-toastify';
 import { createContext, useEffect, useState } from 'react';
+import Listing from './pages/Listing';
 
 // context 
 const MyContext = createContext();
@@ -81,6 +82,7 @@ function App() {
             <Route path='/sign-in' element={ <SignIn /> }/>
             <Route path='/sign-up' element={ <SignUp /> }/>
             <Route path='/profile' element={ <Profile /> }/>
+            <Route path='/create-listing' element={ <Listing /> }/>
           
           </Routes>
           </MyContext.Provider>

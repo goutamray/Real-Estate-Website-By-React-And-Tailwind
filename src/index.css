@@ -6,3 +6,7 @@
 body{
   background-color: rgb(241, 245, 241);
 }
+
+.full-width {
+  width: 100% !important;
+}
