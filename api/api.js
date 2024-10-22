@@ -65,6 +65,7 @@ export const fetchUserDataFromApi = async(url) => {
   }  
 }; 
 
+
 /**
  * send product data to api 
  * @param {*} url 
@@ -80,3 +81,35 @@ export const createListingData = async (url, formData) => {
       throw error; // Re-throw the error for handling in the calling function
   }
 };
+
+/**
+ *  fetch listing from api
+ * @param {*} url 
+ * @returns 
+ */
+export const fetchListingDataFromApi = async(url) => {
+  try {
+     const res = await axios.get("http://localhost:5050/api/v1/listing"+url);
+     return res.data;
+  } catch (error) {
+     console.error('Error submitting form data:', error.message);
+     throw error; 
+  }  
+}; 
+
+
+
+/**
+ * delete listing data from api 
+ * @param {*} id 
+ * @returns 
+ */
+export const deleteListingData = async( id ) => {
+  try {
+     const res = await axios.delete(`http://localhost:5050/api/v1/listing${id}`); 
+     return res.data; 
+  } catch (error) {
+     console.error('Error submitting form data:', error.message);
+     throw error; 
+  }
+}; 

@@ -5,16 +5,16 @@ import { FaSearch } from "react-icons/fa";
 import { MyContext } from "../App";
 import { useContext, useEffect, useState } from "react";
 
- import avater from "../assets/aaaa.jpg";
+import avater from "../assets/aaaa.jpg";
 
 const Header = () => {
 
   const context = useContext(MyContext); 
-  const [photoData, setPhoto] = useState("")
+   const [photoData, setPhoto] = useState("")
 
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user"));
-    setPhoto(user?.photo)
+     setPhoto(user?.photo)
   }, []);
 
     // Check login status on component mount

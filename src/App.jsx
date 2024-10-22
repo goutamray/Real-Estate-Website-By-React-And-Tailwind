@@ -1,5 +1,7 @@
 
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
+import { createContext, useEffect, useState } from 'react';
 
 // components 
 import Header from './components/Header';
@@ -10,9 +12,10 @@ import SignIn from './pages/SignIn';
 import SignUp from './pages/SignUp';
 import Profile from './pages/Profile';
 import About from './pages/About';
-import { ToastContainer } from 'react-toastify';
-import { createContext, useEffect, useState } from 'react';
+import AddListing from './pages/AddListing';
 import Listing from './pages/Listing';
+import SinglePage from './pages/SinglePage';
+import Footer from './components/Footer';
 
 // context 
 const MyContext = createContext();
@@ -82,9 +85,12 @@ function App() {
             <Route path='/sign-in' element={ <SignIn /> }/>
             <Route path='/sign-up' element={ <SignUp /> }/>
             <Route path='/profile' element={ <Profile /> }/>
-            <Route path='/create-listing' element={ <Listing /> }/>
+            <Route path='/create-listing' element={ <AddListing /> }/>
+            <Route path='/listing' element={ <Listing /> }/>
+            <Route path='/listing/:id' element={ <SinglePage /> }/>
           
           </Routes>
+          <Footer />
           </MyContext.Provider>
        </BrowserRouter>
     </>

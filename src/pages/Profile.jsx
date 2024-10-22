@@ -189,8 +189,9 @@ const Profile = () => {
                 <Link to="/create-listing"> Create Listing </Link>
             </button>
           </div>
-          <div className=" mt-5">
+          <div className="flex justify-between mt-5">
             <button  onClick={handleLogout}  className="text-white rounded-lg bg-red-700 px-3 py-2 text-xl font-medium cursor-pointer"> Sign out </button>
+            <button className="text-white rounded-lg bg-blue-700 px-3 py-2 text-xl font-medium cursor-pointer"> <Link to="/listing"> All Listing </Link> </button>
           </div>
 
         </div>
