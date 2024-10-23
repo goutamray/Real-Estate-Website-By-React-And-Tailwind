@@ -10,7 +10,11 @@ import avater from "../assets/aaaa.jpg";
 const Header = () => {
 
   const context = useContext(MyContext); 
-   const [photoData, setPhoto] = useState("")
+  const [photoData, setPhoto] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
+
+  console.log(searchTerm);
+  
 
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user"));
@@ -34,6 +38,13 @@ const Header = () => {
             });
         }
     }, []);
+
+    // form submit 
+    const handleFormSubmit = (e) => {
+       e.preventDefault();
+
+       
+    }
   
   return (
     <div className="py-2 shadow-md bg-slate-200 ">
@@ -44,9 +55,17 @@ const Header = () => {
           </Link>
         </div>
         <div>
-          <form className="bg-slate-100 p-2 sm:p-3 rounded-lg flex justify-between items-center">
-            <input type="text" placeholder="Search..." className="bg-transparent focus:outline-none w-24 sm:w-72"/>
-            <FaSearch className="text-slate-600"/>
+          <form onSubmit={handleFormSubmit} className="bg-slate-100 p-2 sm:p-3 rounded-lg flex justify-between items-center">
+            <input 
+               type="text" 
+               placeholder="Search..." 
+               className="bg-transparent focus:outline-none w-24 sm:w-72"
+               value={searchTerm}
+               onChange={(e) => setSearchTerm(e.target.value)}
+               />
+            <button>
+               <FaSearch className="text-slate-600"/>
+            </button>
           </form>
         </div>
       <div >

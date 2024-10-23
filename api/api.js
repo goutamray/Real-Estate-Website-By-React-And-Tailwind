@@ -129,3 +129,8 @@ export const getListingData = async( id ) => {
      throw error; 
   }
 }; 
+
+
+
+
+
