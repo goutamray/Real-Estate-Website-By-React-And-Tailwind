@@ -113,3 +113,19 @@ export const deleteListingData = async( id ) => {
      throw error; 
   }
 }; 
+
+
+/**
+ * delete listing data from api 
+ * @param {*} id 
+ * @returns 
+ */
+export const getListingData = async( id ) => {
+  try {
+     const res = await axios.get(`http://localhost:5050/api/v1/listing${id}`); 
+     return res.data; 
+  } catch (error) {
+     console.error('Error submitting form data:', error.message);
+     throw error; 
+  }
+}; 

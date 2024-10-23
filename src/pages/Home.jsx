@@ -17,8 +17,25 @@ import 'swiper/css';
 import { Navigation, Autoplay } from 'swiper/modules';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
+import { useEffect, useState } from "react";
+import { fetchListingDataFromApi } from "../../api/api";
+import ListingBox from "../components/ListingBox";
 
 const Home = () => {
+
+  const [listingDataList, setListingDataList] = useState([]);
+
+  console.log(listingDataList);
+  
+
+  useEffect(() => {
+    fetchListingDataFromApi("/").then((res) => {
+      setListingDataList(res.listing); 
+    })
+    
+  }, []);
+
+
   return (
     <>
       <div className=" slider">
@@ -92,100 +109,15 @@ const Home = () => {
 
     <div className="all-listing py-12">
        <div className="container">
-         <h2 className="text-3xl font-bold text-gray-600 "> Recent Real Estate </h2>
-         <div className="listing-data py-5 flex justify-between flex-wrap">
+         <h2 className="text-3xl font-bold text-gray-600 mb-3"> Recent Real Estate </h2>
+         <div className="listing-data py-5 flex flex-row gap-10 flex-wrap">
 
-           <div className="single-listing shadow mb-8">
-              <img src={slider} alt="listing" className="h-[300px] w-[400px] object-cover rounded-md"/>
-              <div className="list-content px-5 py-4 ">
-                <h2 className="text-2xl font-semibold"> Wilshire Victoria </h2>
-                <p className="text-md py-1 "> 10700 Wilshire Blvd, Los Angeles, CA 90024 </p>
-                <p className="font-bold text-md"> $10 000.00 </p>
-                <div className="service flex gap-4 mt-3 justify-between border-t-2 pt-2">
-                    <div className="bed">
-                      <span> </span>
-                      <span> 6 Rooms </span>
-                    </div>
-                    <div className="bed">
-                      <span> </span>
-                      <span> 3 Baths </span>
-                    </div>
-                    <div className="bed">
-                      <span> </span>
-                      <span> 1500sq </span>
-                    </div>
-               </div>
-             </div>
-           </div>
-
-           <div className="single-listing shadow mb-8">
-              <img src={slider} alt="listing" className="h-[300px] w-[400px] object-cover rounded-md"/>
-              <div className="list-content px-5 py-4 ">
-                <h2 className="text-2xl font-semibold"> Wilshire Victoria </h2>
-                <p> 10700 Wilshire Blvd, Los Angeles, CA 90024 </p>
-                <p> $10 000.00 </p>
-                <div className="service flex gap-4">
-                <div className="bed">
-                  <span> </span>
-                  <span> 6 Rooms </span>
-                </div>
-                <div className="bed">
-                  <span> </span>
-                  <span> 3 Baths </span>
-                </div>
-                <div className="bed">
-                  <span> </span>
-                  <span> 1500sq </span>
-                </div>
-               </div>
-             </div>
-           </div>
-
-           <div className="single-listing shadow mb-8">
-              <img src={slider} alt="listing" className="h-[300px] w-[400px] object-cover rounded-md"/>
-              <div className="list-content px-5 py-4 ">
-                <h2 className="text-2xl font-semibold"> Wilshire Victoria </h2>
-                <p> 10700 Wilshire Blvd, Los Angeles, CA 90024 </p>
-                <p> $10 000.00 </p>
-                <div className="service flex gap-4">
-                <div className="bed">
-                  <span> </span>
-                  <span> 6 Rooms </span>
-                </div>
-                <div className="bed">
-                  <span> </span>
-                  <span> 3 Baths </span>
-                </div>
-                <div className="bed">
-                  <span> </span>
-                  <span> 1500sq </span>
-                </div>
-               </div>
-             </div>
-           </div>
-
-           <div className="single-listing shadow mb-8">
-              <img src={slider} alt="listing" className="h-[300px] w-[400px] object-cover rounded-md"/>
-              <div className="list-content px-5 py-4 ">
-                <h2 className="text-2xl font-semibold"> Wilshire Victoria </h2>
-                <p> 10700 Wilshire Blvd, Los Angeles, CA 90024 </p>
-                <p> $10 000.00 </p>
-                <div className="service flex gap-4">
-                <div className="bed">
-                  <span> </span>
-                  <span> 6 Rooms </span>
-                </div>
-                <div className="bed">
-                  <span> </span>
-                  <span> 3 Baths </span>
-                </div>
-                <div className="bed">
-                  <span> </span>
-                  <span> 1500sq </span>
-                </div>
-               </div>
-             </div>
-           </div>
+          {
+            listingDataList?.length !== 0 && 
+            listingDataList?.map((item, index) => {
+                return <ListingBox key={index} item={item}/>
+            })
+          }
 
          </div>
        </div>

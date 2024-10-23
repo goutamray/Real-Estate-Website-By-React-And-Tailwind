@@ -1,29 +1,45 @@
 
-import photoData from "../../src/assets/slider-1.jpg"; 
-import { FaBed } from "react-icons/fa";
+import { useEffect, useState } from "react";
+
+import { IoIosBed } from "react-icons/io";
 import { FaBath } from "react-icons/fa";
 import { FaVectorSquare } from "react-icons/fa";
+import { useParams } from "react-router-dom";
+import { getListingData } from "../../api/api";
 
 const SinglePage = () => {
+  const [listingData, setListingData] = useState({});
+
+  const { id } = useParams();
+
+ // get single listing 
+  useEffect(() => {
+    getListingData(`/${id}`).then((res) => {
+      setListingData(res.listing)
+    })
+  }, [id]);
+ 
+
   return (
     <>
+    <div className="pb-10"> 
       <div className="py-2">
-        <img src={photoData} alt="photo" className="h-[500px] w-full " />
-        <div className="container py-5 flex gap-10">
+        <img src={listingData?.photo} alt="photo" className="h-[600px] w-full " />
+        <div className="container py-10 flex gap-12">
            <div className="price-box">
-              <h2> $ 500000 </h2>
+              <h2 className="text-xl font-bold"> <span className="text-green-500 text-xl"> $ </span>  {listingData?.discountPrice} </h2>
            </div>
            <div className="bed-room flex gap-3 items-center">
-              <span> <FaBed /> </span>
-              <h2> 5 Bedrooms </h2>
+              <span className="text-green-500 text-xl"> <IoIosBed /> </span>
+              <h2 className="text-xl font-semibold">  {listingData?.bedRoom}  Bedrooms </h2>
            </div>
            <div className="bath-room flex gap-3 items-center">
-              <span> <FaBath /> </span>
-              <h2> 2 Bathrooms </h2>
+              <span className="text-green-500 text-xl"> <FaBath /> </span>
+              <h2  className="text-xl font-semibold">  {listingData?.bathRoom}  Bathrooms </h2>
            </div>
            <div className="size flex gap-3 items-center">
-              <span> <FaVectorSquare /> </span>
-              <h2> 1200 Squares </h2>
+              <span className="text-green-500 text-xl"> <FaVectorSquare /> </span>
+              <h2 className="text-xl font-semibold"> {listingData?.size} Squares </h2>
            </div>
            <div className="buy-btn">
               <button> </button>
@@ -31,24 +47,24 @@ const SinglePage = () => {
         </div>
       </div>
       
-      <div className="container py-5">
-          <div className="another-box">
-              <div className="first-box flex justify-between w-[600px] mb-3">
-                <h2 className="text-2xl font-bold "> Wilshire Victoria </h2>
-                <span className="bg-[#011b4e] px-3 py-1 rounded-md text-white"> For Sale </span>
+      <div className="container pb-5 ">
+          <div className="another-box bg-white p-10 rounded-lg">
+              <div className="first-box flex justify-between  mb-3">
+                <h2 className="text-3xl font-bold hover:text-blue-500"> {listingData?.name} </h2>
+                <span className="bg-[#eab413] capitalize px-3 py-1 rounded-md text-white"> For {listingData?.type} </span>
               </div>
-              <h3 className="text-md font-medium "> 10700 Wilshire Blvd, Los Angeles, CA 90024 </h3>
+              <h3 className="text-md font-medium "> {listingData?.address} </h3>
           </div>
       </div>
 
       <div className="description mb-5">
         <div className="container">
           <h2 className="text-3xl font-bold "> Description </h2>
-          <p> Lorem ipsum dolor sit amet consectetur adipisicing elit. Unde minima tenetur excepturi eaque dolor, sequi fugit perspiciatis nostrum earum cum, provident eum molestias minus at, cupiditate mollitia. Aliquid a error, temporibus perspiciatis numquam ipsam. Fuga eius distinctio ipsam earum non est molestias sed illo nemo voluptas amet, rem vitae ipsum! </p>
+          <p> {listingData?.description} </p>
         </div>
       </div>
-
-    </>
+    </div>
+  </>
   )
 }
 

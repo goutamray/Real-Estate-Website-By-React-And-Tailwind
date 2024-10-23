@@ -132,7 +132,7 @@ const AddListing = () => {
   }
 
   return (
-    <div className="container">
+    <div className="container pb-10">
       <h2 className="text-3xl font-semibold text-center my-7"> Create a Listing</h2>
       <div className="my-listing-form flex flex-col sm:flex-row gap-2 ">
          <div >

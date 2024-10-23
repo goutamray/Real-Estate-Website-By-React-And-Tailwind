@@ -1,16 +1,32 @@
 import { useEffect, useState } from "react"
 import { deleteListingData, fetchListingDataFromApi } from "../../api/api";
 import createToast from "../utilis/toastify";
+import { useNavigate } from "react-router-dom";
 
 
 const Listing = () => {
    const [listingData, setListingData ] = useState([]);
+   const [isLogin, setIsLogin] = useState(false);
+   
+   const navigate = useNavigate();
   
    useEffect(() => {
       fetchListingDataFromApi("/").then((res) => {
         setListingData(res.listing)
       });
    }, []);
+
+    // check login 
+    useEffect(() => {
+      window.scrollTo(0,0);
+      const token = localStorage.getItem("token");
+      if (token !== null && token !== undefined && token !== "") {
+        setIsLogin(true);
+      }else{
+        navigate("/sign-in"); 
+      }
+    }, []);
+
 
 
    // delete listing 
