@@ -64,7 +64,7 @@ const Listing = () => {
                   </div>
                 </td>
              </tr>
-              }) : <p> No Listing Found </p>
+              }) : <p className="text-center text-md"> No Listing Found </p>
             }
 
            </tbody>

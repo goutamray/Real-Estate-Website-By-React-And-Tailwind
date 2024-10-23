@@ -18,6 +18,7 @@ const AddListing = () => {
     type : "",
     offer : null,
     photo : [],
+    size : "",
     userRef : ""
   }); 
   const [file, setFile ] = useState([]); 
@@ -69,6 +70,7 @@ const AddListing = () => {
     formData.append('parking', input.parking);
     formData.append('type', input.type);
     formData.append('offer', input.offer);
+    formData.append('size', input.size);
     formData.append('userRef', userIdData);
 
 
@@ -97,7 +99,7 @@ const AddListing = () => {
   try {
     createListingData("/create", formData).then((res) => {
       setLoading(false); 
-      createToast("Product Created Successfull", "success"); 
+      createToast("Listing Created Successfull", "success"); 
  
       navigate(`/listing`)
 
@@ -114,6 +116,7 @@ const AddListing = () => {
         parking : false,
         type : "",
         offer : null,
+        size : "",
         photo : [],
       });
       e.target.reset(); 
@@ -251,6 +254,16 @@ const AddListing = () => {
                          type="text"
                          name="discountPrice"
                          value={input.discountPrice}
+                         onChange={handleInputChange} 
+                         className="border border-1 border-gray-400 p-1 rounded-lg"
+                        />
+                    </div>
+                    <div className="size">
+                      <h2 className="mb-2 font-medium "> Size  </h2>
+                      <input 
+                         type="text"
+                         name="size"
+                         value={input.size}
                          onChange={handleInputChange} 
                          className="border border-1 border-gray-400 p-1 rounded-lg"
                         />
